@@ -1,0 +1,233 @@
+
+=== step1_big.py ===
+STEP 1  The big network: 64 squares -> 300 units -> 100 units -> 10 digits
+  50,200 connections. 1,000 pictures to learn from, 500 for the test. 1,500 training steps.
+   run   right on the test   step with the lowest loss on the watch set
+   0         98.4 %                 725
+   1         98.4 %                 625
+   2         98.2 %                 725
+   3         98.2 %                 450
+   4         98.2 %                 500
+   5         98.2 %                 600
+   6         97.6 %                 400
+   7         98.0 %                 525
+   8         98.6 %                 750
+   9         98.6 %                 475
+  Mean of the ten runs: 98.2 %
+
+  Delete the smallest connections of the trained network, all at once, and do not train again:
+   connections left      right on the test (mean of ten)
+   50,200  (100.0 %)      98.2 %
+   40,260  ( 80.2 %)      98.3 %
+   25,919  ( 51.6 %)      98.0 %
+   16,711  ( 33.3 %)      97.3 %
+   10,795  ( 21.5 %)      94.7 %
+    5,631  ( 11.2 %)      82.5 %
+    2,960  (  5.9 %)      55.2 %
+    1,037  (  2.1 %)      19.4 %
+
+=== step2_search.py ===
+STEP 2  The search in rounds (Frankle and Carbin, section 1)
+  Every round: train 1,500 steps, delete 20 % of what is left (10 % in the last table),
+  put every connection that is left back to its very first value.
+   round   connections left     right on the test: mean (lowest, highest of ten runs)
+     0     50,200  (100.0 %)      98.2 %   (97.6, 98.6)
+     1     40,260  ( 80.2 %)      98.2 %   (97.8, 98.4)
+     2     32,298  ( 64.3 %)      98.2 %   (97.6, 98.4)
+     3     25,919  ( 51.6 %)      98.2 %   (97.6, 98.4)
+     4     20,808  ( 41.5 %)      98.0 %   (97.4, 98.4)
+     5     16,711  ( 33.3 %)      97.9 %   (97.4, 98.2)
+     6     13,428  ( 26.7 %)      98.1 %   (97.8, 98.4)
+     7     10,795  ( 21.5 %)      97.9 %   (97.6, 98.4)
+     8      8,684  ( 17.3 %)      97.9 %   (97.4, 98.4)
+     9      6,990  ( 13.9 %)      97.8 %   (97.4, 98.6)
+    10      5,631  ( 11.2 %)      97.7 %   (97.2, 98.4)
+    11      4,540  (  9.0 %)      97.5 %   (97.0, 98.2)
+    12      3,664  (  7.3 %)      97.5 %   (96.6, 98.0)
+    13      2,960  (  5.9 %)      97.4 %   (96.4, 98.2)
+    14      2,394  (  4.8 %)      97.3 %   (96.4, 98.4)
+    15      1,938  (  3.9 %)      97.2 %   (96.6, 98.0)
+    16      1,571  (  3.1 %)      97.0 %   (96.4, 97.6)
+    17      1,276  (  2.5 %)      96.7 %   (96.0, 97.6)
+    18      1,037  (  2.1 %)      96.6 %   (95.6, 97.2)
+    19        845  (  1.7 %)      95.8 %   (95.2, 96.6)
+    20        689  (  1.4 %)      95.3 %   (94.0, 96.8)
+    21        564  (  1.1 %)      94.3 %   (93.6, 95.2)
+    22        462  (  0.9 %)      93.5 %   (92.6, 94.8)
+  After 18 rounds the three tables keep 346, 541 and 150 connections.
+  Units that still have a way in and a way out: 194 of 300 and 92 of 100 (means).
+
+=== step3_new_start.py ===
+STEP 3  Are the places enough?
+  ticket: the places of the search with their first values
+  new:    the same places with new random values
+  random: as many connections in every table at random places, first values
+   connections left      ticket    new     random     new start wins in
+   50,200  (100.0 %)     98.2     98.1     98.2      2 of 10 runs
+   40,260  ( 80.2 %)     98.2     98.2     98.0      3 of 10 runs
+   32,298  ( 64.3 %)     98.2     97.9     97.9      2 of 10 runs
+   25,919  ( 51.6 %)     98.2     97.7     97.7      1 of 10 runs
+   20,808  ( 41.5 %)     98.0     97.5     97.6      1 of 10 runs
+   16,711  ( 33.3 %)     97.9     97.5     97.6      0 of 10 runs
+   13,428  ( 26.7 %)     98.1     97.4     97.6      0 of 10 runs
+   10,795  ( 21.5 %)     97.9     97.2     97.3      0 of 10 runs
+    8,684  ( 17.3 %)     97.9     97.1     97.4      0 of 10 runs
+    6,990  ( 13.9 %)     97.8     96.9     97.1      1 of 10 runs
+    5,631  ( 11.2 %)     97.7     96.9     97.2      1 of 10 runs
+    4,540  (  9.0 %)     97.5     96.8     97.0      0 of 10 runs
+    3,664  (  7.3 %)     97.5     96.7     96.8      1 of 10 runs
+    2,960  (  5.9 %)     97.4     96.4     96.3      0 of 10 runs
+    2,394  (  4.8 %)     97.3     96.3     95.7      1 of 10 runs
+    1,938  (  3.9 %)     97.2     96.0     94.1      0 of 10 runs
+    1,571  (  3.1 %)     97.0     95.5     91.6      0 of 10 runs
+    1,276  (  2.5 %)     96.7     95.1     86.6      0 of 10 runs
+    1,037  (  2.1 %)     96.6     93.9     73.1      0 of 10 runs
+      845  (  1.7 %)     95.8     92.3     58.1      0 of 10 runs
+      689  (  1.4 %)     95.3     90.4     40.3      0 of 10 runs
+      564  (  1.1 %)     94.3     85.1     29.5      0 of 10 runs
+      462  (  0.9 %)     93.5     73.3     22.9      0 of 10 runs
+  Steps until 95 of 100 pictures of the watch set are right (mean of the runs that get there):
+   connections left      ticket          new
+   50,200                92 (10 of 10)     112 (10 of 10)
+   25,919                25 (10 of 10)     148 (10 of 10)
+   10,795                25 (10 of 10)     235 (10 of 10)
+    5,631                38 (10 of 10)     385 (10 of 10)
+    2,960                65 (10 of 10)     450 (10 of 10)
+    1,571               152 (10 of 10)     708 (10 of 10)
+    1,037               225 (10 of 10)    1083 ( 6 of 10)
+
+=== step4_objections.py ===
+STEP 4  More time and bigger steps
+  time: 6,000 steps, not 1,500.   big steps: step size 0.0048, not 0.0012.
+                        1,500 steps      6,000 steps      big steps        steps to the lowest watch loss, big steps
+   connections left    ticket   new     ticket   new     ticket   new      ticket   new
+   10,795 (21.5 %)      97.9   97.2     98.0   97.6     98.0   97.2       192     410
+    5,631 (11.2 %)      97.7   96.9     97.9   97.4     97.8   97.3       222     548
+    2,960 ( 5.9 %)      97.4   96.4     97.6   97.2     97.5   96.7       275     555
+    1,571 ( 3.1 %)      97.0   95.5     97.1   96.7     97.1   96.3       370     798
+    1,037 ( 2.1 %)      96.6   93.9     96.7   95.8     96.7   95.0       420    1078
+      689 ( 1.4 %)      95.3   90.4     95.9   92.3     95.9   90.6       608    1255
+      462 ( 0.9 %)      93.5   73.3     94.4   77.2     94.5   72.8       632    1418
+
+=== step5_signs.py ===
+STEP 5  Signs and sizes (after Zhou, Lan, Liu, Yosinski 2019)
+  All on the places of the ticket. A value has a sign (plus or minus) and a size.
+   connections left                       10,795  5,631  2,960  1,571  1,037    689    462
+   first signs, first sizes                 97.9   97.7   97.4   97.0   96.6   95.3   93.5
+   first signs, new sizes                   97.6   97.4   97.3   96.9   96.2   95.2   93.3
+   first signs, one size for all            97.7   97.6   97.3   96.9   96.4   95.3   93.5
+   first values, mixed among the places     97.5   97.0   96.8   96.0   95.3   93.9   92.2
+   first signs in tables 2 and 3 only       97.2   97.2   97.0   96.3   95.6   93.9   90.8
+   first signs in table 1 only              97.3   97.2   96.8   96.2   94.9   92.9   88.2
+   new signs, first sizes                   97.7   97.1   96.5   95.7   94.4   90.0   81.7
+   new signs, new sizes                     97.2   96.9   96.4   95.5   93.9   90.4   73.3
+   every first sign turned around           97.8   97.0   95.0   74.2   35.0   18.0   12.4
+
+  Share of plus signs among the first values the ticket keeps (table 1, 2, 3):
+   50,200 left:   50.0 %  50.1 %  50.9 %
+   10,795 left:   62.1 %  61.3 %  45.7 %
+    2,960 left:   72.5 %  71.1 %  34.8 %
+    1,037 left:   86.0 %  81.0 %  23.1 %
+      462 left:   94.8 %  88.6 %  16.1 %
+  Connections of the ticket with the same sign before and after training (1,037 left): 99.5 %, 98.9 %, 99.8 %
+
+  Dead units: units with a way in and a way out that answer 0 for all 1,000 pictures.
+   left      live units     dead before step 1: ticket  new  turned     dead after training: ticket  new
+   10,795   layer 1: 300.0                 2.4    9.0   21.9                          2.8   23.3
+   10,795   layer 2:  99.2                 1.4    5.7    0.3                          1.4   14.0
+    2,960   layer 1: 283.2                 2.9   46.9  125.9                          2.9   79.5
+    2,960   layer 2:  97.5                 0.1    3.5    4.5                          0.1   16.5
+    1,037   layer 1: 194.3                 3.8   66.0  156.4                          4.2   90.5
+    1,037   layer 2:  92.5                 1.1   17.3   59.7                          1.1   39.5
+      462   layer 1: 111.2                 1.9   46.3  104.5                          1.9   56.3
+      462   layer 2:  71.6                 1.3   30.7   68.6                          1.3   49.2
+
+  Why a sign can kill a unit: connections into one live unit of layer 1, and the new start.
+   left     connections for one unit   units with 1 connection   of those dead with a new start
+    2,960        3.72                     27.8                   48.2 %
+    1,037        1.75                     96.1                   46.9 %
+      462        1.26                     84.6                   48.5 %
+
+  Right on the test before the first training step (10 % is a guess):
+   left       ticket (lowest, highest run)     new start   random places
+   50,200       9.5  (5.0, 13.8)                 9.3         9.5
+   25,919      84.8  (79.8, 90.4)                 8.9         9.3
+   10,795      91.7  (87.0, 94.2)                 9.3        10.0
+    2,960      90.9  (83.8, 94.8)                 9.6         8.4
+    1,037      77.5  (58.4, 88.2)                11.4        10.0
+      462      66.2  (31.6, 80.6)                 9.5        10.6
+
+=== step6_shortcuts.py ===
+STEP 6  Shortcuts
+  rounds:   the ticket of the search (18 rounds of training for 1,037 connections)
+  at once:  train the big network one time, keep the biggest, back to the first values
+  before:   keep the biggest first values, with no training at all
+  narrow:   a plain network 64 -> h -> 10 with as many connections, 1,500 and 6,000 steps
+  keep on:  delete in rounds and keep the trained values (no way back to the start)
+   left      rounds  at once  before  random     narrow (h)  1,500   6,000     keep on    "before" shares with the ticket
+   10,795     97.9    97.9    98.0    97.3        146        97.7    98.0       98.4        52.6 %
+    5,631     97.7    97.5    97.6    97.2         76        97.3    97.8       97.6        40.5 %
+    2,960     97.4    96.8    96.5    96.3         40        97.2    97.5       96.7        31.5 %
+    1,571     97.0    94.6    91.9    91.6         21        97.0    97.1       95.3        24.1 %
+    1,037     96.6    90.6    79.3    73.1         14        96.0    96.9       94.1        20.5 %
+      689     95.3    81.5    47.5    40.3          9        94.5    96.5       90.3        17.2 %
+      462     93.5    61.9    27.5    22.9          6        90.2    93.8       84.2        14.7 %
+  Training runs to find a ticket with 1,037 connections: 18 of the big network and its smaller rounds, 27,000 steps.
+  Training runs for the narrow network: 1.
+  Dead units of the narrow network before step 1 (14 units, each with 64 connections), ten runs: [0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+
+=== tests.py ===
+ok    1,000 pictures to learn from, 297 to watch, 500 for the test
+ok    every square of a picture is between 0 and 1, never negative
+ok    the network has 19,200 + 30,000 + 1,000 = 50,200 connections
+ok    the same seed gives the same first values
+ok    half of the first values are plus, half minus (49 to 51 %)
+ok    one round deletes 20 % of tables 1 and 2 and 10 % of table 3
+ok    the deleted connections are the smallest ones
+ok    a second round never brings a connection back
+ok    random places keep as many connections in every table
+ok    "the biggest" keeps as many as asked, and they are the biggest
+ok    a deleted connection stays at 0 through training
+ok    the same seed gives the same training run
+ok    training measures at step 0 and then every 25 steps
+ok    a unit is live when it has a way in and a way out
+ok    a live unit with only minus connections answers 0 for every picture
+ok    the same unit with a plus connection is not dead
+ok    the search made again gives the saved places (run 0, rounds 1 and 2)
+ok    and the saved test scores
+ok    the saved places have the counts of the rounds
+ok    the big network: 98.2 % right on the test, every run above 97
+ok    deleted at once with no training after it: half 98.0 %, nine tenths 82.5 %, 1,037 left 19.4 %
+ok    18 rounds leave 1,037 connections: 346, 541 and 150
+ok    the ticket with 1,037 connections: 96.6 % (lowest run 95.6)
+ok    the ticket with 462 connections: 93.5 %
+ok    a new start on the same places: 93.9 % and 73.3 %
+ok    the new start beats the ticket in 0 of 10 runs (1,037 and 462 left)
+ok    random places with the first values: 73.1 % and 22.9 %
+ok    four times the time: ticket 96.7, new start 95.8 (1,037); 94.4 and 77.2 (462)
+ok    four times bigger steps: ticket 96.7, new start 95.0 (1,037)
+ok    with more time the new start still loses in at least 8 of 10 runs
+ok    first signs with new sizes 96.2 %, new signs with first sizes 94.4 %
+ok    first signs with one size for all 96.4 %, every sign turned around 35.0 %
+ok    plus signs among the first values the ticket keeps in table 1: 86.0 % (all connections: 50.0 %)
+ok    99 of 100 kept connections have the same sign before and after training
+ok    layer 1 at 1,037 left: 194 live units; dead before step 1: ticket 4, new start 66, turned 156
+ok    after training the new start has 90 dead units, the ticket 4
+ok    run 0: the dead units counted from the saved places are the saved number
+ok    96 of the 194 units hang on one connection; a new start kills 47 % of them
+ok    before the first training step the ticket is right in 77.5 %, the new start in 11.4 %
+ok    all at once 90.6 %, picked before training 79.3 % (1,037 left)
+ok    the narrow network 64 -> 14 -> 10 has 1,036 connections
+ok    it is right in 96.0 % after 1,500 steps and 96.9 % after 6,000
+ok    the narrow network starts with 2 dead units of 140 in ten runs
+
+ALL TESTS PASS (43 of 43)
+
+=== exercise.py ===
+3 rounds of training to find the ticket
+  run 0: 1,037 connections left, 95.2 % right on the test
+  run 1: 1,037 connections left, 96.2 % right on the test
+  run 2: 1,037 connections left, 94.2 % right on the test
+  run 3: 1,037 connections left, 95.2 % right on the test
+  run 4: 1,037 connections left, 95.2 % right on the test
+  mean of five runs: 95.2 %
