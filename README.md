@@ -44,9 +44,9 @@ The data is on your disk after the install, nothing to download: the 1,797 handw
 ## Reading the numbers
 
 - **One small problem.** Every number is the mean of ten runs of one network on 8 × 8 digits. The test has 500 pictures, so one picture is 0.2 of a point. The lowest and highest run are printed in step 2.
-- **The effect depends on the setup.** Liu et al. (2018) tested larger networks with well chosen step sizes and found no gain from the first numbers. Here, four times the time makes the gap at 1,037 connections smaller (2.7 points to 0.9), and neither change closes it.
+- **How much the first numbers help depends on the network and on the settings.** Liu et al. (2018) tested larger networks with well chosen step sizes and found no gain from the first numbers. Here, four times the time brings the ticket and the new start closer at 1,037 connections (from 2.7 percent apart to 0.9), and neither change brings the new start up to the ticket.
 - **Dead units are our own measurement.** The papers do not give this reason. It holds here because every input square is between 0 and 1 and the first layer of the ticket has 346 connections for 194 units: a unit with one connection and a minus sign answers 0 for every picture, and training never corrects it.
-- **The ticket is not the best small network here.** A plain narrow network with as many connections scores 96.0 % after one training and 96.9 % with four times the time. The ticket scores 96.6 % and 96.7 %, and costs 18 trainings (27,000 steps) to find.
+- **The ticket is not the best small network here.** An ordinary small network with as many connections (14 units, every unit connected to all 64 inputs) scores 96.0 % after one training and 96.9 % with four times the time. The ticket scores 96.6 % and 96.7 %, and costs 18 trainings (27,000 steps) to find.
 - **The order of the signs tests.** The gap between "first signs, new sizes" (96.2) and the ticket (96.6) is two pictures of 500. The gap to "every sign turned around" (35.0) is 308 pictures.
 
 ## What this is not
@@ -59,7 +59,7 @@ Sources: Frankle and Carbin, "The Lottery Ticket Hypothesis: Finding Sparse, Tra
 
 ## Try it
 
-The search in the video takes 18 rounds to get from 50,200 connections to 1,037: 18 trainings. Deleting all at once (1 round) is six points worse. `exercise.py` runs the search with 3 rounds and ends at the same 346, 541 and 150 connections.
+The search in the video takes 18 rounds to get from 50,200 connections to 1,037: 18 trainings. Deleting all at once (1 round) scores 6 percent lower (90.6 against 96.6). `exercise.py` runs the search with 3 rounds and ends at the same 346, 541 and 150 connections.
 
 ```python
 ROUNDS = int(sys.argv[1]) if len(sys.argv) > 1 else 3
